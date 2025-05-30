@@ -3,7 +3,7 @@
 
 services:
   vote:
-    image: pokfinner/vote:latest
+    image: yoshitakumi/vote:latest
     depends_on:
       redis:
         condition: service_healthy 
@@ -13,7 +13,7 @@ services:
       - back-tier
 
   result:
-    image: pokfinner/result:latest
+    image: yoshitakumi/result:latest
     depends_on:
       db:
         condition: service_healthy 
@@ -23,7 +23,7 @@ services:
       - back-tier
 
   worker:
-    image: pokfinner/worker:latest
+    image: yoshitakumi/worker:latest
     depends_on:
       redis:
         condition: service_healthy 
