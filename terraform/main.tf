@@ -28,7 +28,8 @@ module "compute" {
   private_sub_result_id = module.networking.private_sub_result_id
   private_sub_worker_id = module.networking.private_sub_worker_id
   private_sub_db_id     = module.networking.private_sub_db_id
-  public_sub1_id         = module.networking.public_subnet_ids[0]
+  public_sub1_id        = module.networking.public_subnet_ids[0]
+  public_sub2_id        = module.networking.public_subnet_ids[1]
   my_ip                 = var.my_ip
   result_app_port       = var.result_app_port
   vote_app_port         = var.vote_app_port
