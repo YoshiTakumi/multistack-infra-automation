@@ -19,8 +19,11 @@ variable "key_name" {
 }
 
 variable "public_sub1_id" {
-  description = "Public subnet ID for bastion host"
   type        = string
+}
+
+variable "public_sub2_id" {
+  type = string
 }
 
 variable "private_sub_vote_id" {

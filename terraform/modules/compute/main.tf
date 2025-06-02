@@ -249,3 +249,53 @@ resource "aws_instance" "postgres_ec2" {
     Name = "postgres-ec2"
   }
 }
+
+resource "aws_lb_target_group" "vote_tg_y" {
+  name     = "vote-tg-y"
+  port     = var.alb_port
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
+  target_type = "instance"
+}
+
+resource "aws_lb_target_group" "result_tg_y" {
+  name     = "result-tg-y"
+  port     = var.alb_port
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
+  target_type = "instance"
+}
+
+resource "aws_lb" "vote_app_alb" {
+    name                = "vote-app-alb"
+    internal            = false
+    load_balancer_type  = "application"
+    security_groups     = [aws_security_group.alb_sg.id]
+    subnets             = [var.public_sub1_id,var.public_sub2_id]
+    tags = {
+        Name = "vote-alb"
+    }
+}
+resource "aws_lb_listener" "http_listener" {
+    load_balancer_arn = aws_lb.vote_app_alb.arn
+    port              = var.alb_port
+    protocol          = "HTTP"
+    
+    default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.vote_tg_y.arn
+  }
+}
+
+
+resource "aws_lb_target_group_attachment" "vote_app_attach" {
+  target_group_arn = aws_lb_target_group.vote_tg_y.arn
+  target_id        = aws_instance.vote_app_ec2.id
+  port             = var.alb_port
+}
+
+resource "aws_lb_target_group_attachment" "result_app_attach" {
+  target_group_arn = aws_lb_target_group.result_tg_y.arn
+  target_id        = aws_instance.result_app_ec2.id
+  port             = var.alb_port
+}
