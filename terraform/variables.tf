@@ -40,3 +40,43 @@ variable "private_sub_worker_cidr" {
 variable "private_sub_db_cidr"{
     type = string
 }
+variable "ami_id" {
+  type        = string
+  description = "AMI ID for EC2 instances"
+}
+
+variable "instance_type" {
+  type        = string
+  description = "EC2 instance type"
+}
+
+variable "key_name" {
+  type        = string
+  description = "SSH key name"
+}
+
+variable "my_ip" {
+    type      = string
+    description = "current IP"
+}
+variable "alb_port" {
+  type = string
+}
+
+variable "vote_app_port" {
+  type = string
+}
+
+variable "result_app_port" {
+  type = string
+}
+
+variable "redis_port" {
+  type = string
+}
+variable "postgres_port" {
+  type = string
+}
+variable "ssh_port" {
+  type = string
+}

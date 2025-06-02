@@ -1,8 +1,14 @@
 *.tfstate
 *.tfstate.backup
-terraform.tfvars
+*.tfvars
 .terraform/
+*.pem
 .terraform.lock.hcl
 crash.log
 override.tf
 override.tf.json
+install_docker_postgres.sh
+install_docker_redis.sh
+install_docker_result.sh
+install_docker_vote.sh
+install_docker_worker.sh
