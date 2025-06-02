@@ -1,3 +1,49 @@
+resource "aws_eip" "nat_eip" {
+  domain = "vpc"
+  tags = {
+    Name = "voting-nat-eip"
+  }
+}
+resource "aws_nat_gateway" "nat_gw" {
+  allocation_id = aws_eip.nat_eip.id
+  subnet_id     = aws_subnet.public_sub1.id
+  tags = {
+    Name = "voting-nat-gw"
+  }
+
+  depends_on = [aws_internet_gateway.igw]
+}
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.main_vpc.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat_gw.id
+  }
+
+  tags = {
+    Name = "voting-private-rt"
+  }
+}
+resource "aws_route_table_association" "private_vote" {
+  subnet_id      = aws_subnet.private_sub_vote.id
+  route_table_id = aws_route_table.private.id
+}
+
+resource "aws_route_table_association" "private_result" {
+  subnet_id      = aws_subnet.private_sub_result.id
+  route_table_id = aws_route_table.private.id
+}
+
+resource "aws_route_table_association" "private_worker" {
+  subnet_id      = aws_subnet.private_sub_worker.id
+  route_table_id = aws_route_table.private.id
+}
+
+resource "aws_route_table_association" "private_db" {
+  subnet_id      = aws_subnet.private_sub_db.id
+  route_table_id = aws_route_table.private.id
+}
 resource "aws_vpc" "main_vpc" {
     cidr_block = var.main_vpc_cidr
     enable_dns_support = true
