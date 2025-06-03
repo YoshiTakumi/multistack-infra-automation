@@ -101,7 +101,7 @@ app.use(express.static(path.join(__dirname, 'views')));
 app.use("/result", express.static(path.join(__dirname, 'views')));
 
 // Serve the same index.html for both routes
-app.get(['/', '/result'], function (req, res) {
+app.get(['/', '/result*'], function (req, res) {
   res.sendFile(path.resolve(__dirname, 'views', 'index.html'));
 });
 
