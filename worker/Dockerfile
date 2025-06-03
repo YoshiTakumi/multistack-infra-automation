@@ -18,11 +18,16 @@ WORKDIR /app
 COPY --from=build /app/publish ./
 
 # Set environment variables (can be overridden at runtime)
-ENV DB_HOST=db
-ENV DB_USERNAME=postgres
-ENV DB_PASSWORD=postgres
-ENV DB_NAME=postgres
-ENV REDIS_HOST=redis
+ARG DB_HOST=db
+ARG DB_USERNAME=postgres
+ARG DB_PASSWORD=postgres
+ARG DB_NAME=postgres
+ARG REDIS_HOST=redis
+ENV DB_HOST=${DB_HOST}
+ENV DB_USERNAME=${DB_USERNAME}
+ENV DB_PASSWORD=${DB_PASSWORD}
+ENV DB_NAME=${DB_NAME}
+ENV REDIS_HOST=${REDIS_HOST}
 
 # Define the entry point
 ENTRYPOINT ["dotnet", "Worker.dll"]
