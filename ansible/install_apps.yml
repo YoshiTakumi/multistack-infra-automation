@@ -1,0 +1,58 @@
+---
+- name: Install Docker and run container
+  hosts: all
+  become: true
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Enable and start Docker
+      systemd:
+        name: docker
+        enabled: true
+        state: started
+
+    - name: Run application containers
+      shell: >
+        {% if inventory_hostname == 'vote-app' %}
+        docker run -d --name vote-app --restart always \
+          -p 80:80 \
+          -e REDIS_HOST={{ hostvars['redis-host']['ansible_host'] }} \
+          yoshitakumi/voting-app:v2
+        {% elif inventory_hostname == 'result-app' %}
+        docker run -d --name result-app --restart always \
+          -p 80:80 \
+          -e PG_HOST={{ hostvars['postgres-db']['ansible_host'] }} \
+          -e PG_PORT=5432 \
+          -e PG_USER=postgres \
+          -e PG_PASSWORD=postgres \
+          -e PG_DATABASE=postgres \
+          yoshitakumi/result-app:v2
+        {% elif inventory_hostname == 'worker-app' %}
+        docker run -d --name worker-app --restart always \
+          -e REDIS_HOST={{ hostvars['redis-host']['ansible_host'] }} \
+          -e DB_HOST={{ hostvars['postgres-db']['ansible_host'] }} \
+          -e DB_USERNAME=postgres \
+          -e DB_PASSWORD=postgres \
+          -e DB_NAME=postgres \
+          yoshitakumi/worker-app:v2
+        {% elif inventory_hostname == 'redis-host' %}
+        docker run -d --name redis-host --restart always \
+          -p 6379:6379 redis
+        {% elif inventory_hostname == 'postgres-db' %}
+        docker run -d --name postgres-db --restart always \
+          -p 5432:5432 \
+          -e POSTGRES_USER=postgres \
+          -e POSTGRES_PASSWORD=postgres \
+          -e POSTGRES_DB=postgres \
+          postgres
+        {% endif %}
+      args:
+        executable: /bin/bash
+
