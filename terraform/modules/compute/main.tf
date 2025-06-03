@@ -286,6 +286,21 @@ resource "aws_lb_listener" "http_listener" {
     target_group_arn = aws_lb_target_group.vote_tg_y.arn
   }
 }
+resource "aws_lb_listener_rule" "result_path_rule" {
+  listener_arn = aws_lb_listener.http_listener.arn
+  priority     = 100
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.result_tg_y.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/result*", "/socket.io*"]
+    }
+  }
+}
 
 
 resource "aws_lb_target_group_attachment" "vote_app_attach" {
