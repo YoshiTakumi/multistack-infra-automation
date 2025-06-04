@@ -2,6 +2,10 @@ provider "aws" {
     region = var.aws_region
 }
 
+module "iam" {
+  source = "./modules/iam"
+}
+
 module "networking" {
     source = "./modules/networking"
     aws_region              = var.aws_region
@@ -37,5 +41,5 @@ module "compute" {
   alb_port              = var.alb_port
   redis_port            = var.redis_port
   postgres_port         = var.postgres_port
-
+  instance_profile_name = module.iam.ec2_instance_profile_name
 }

@@ -169,6 +169,7 @@ resource "aws_instance" "bastion_ec2" {
     vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
     associate_public_ip_address = true
     key_name                    = var.key_name
+    iam_instance_profile = var.instance_profile_name
 
     tags = {
         Name = "bastion-ec2-y"
@@ -182,6 +183,7 @@ resource "aws_instance" "vote_app_ec2" {
     vpc_security_group_ids      = [aws_security_group.vote_app_sg.id]
     associate_public_ip_address = false
     key_name                    = var.key_name
+    iam_instance_profile = var.instance_profile_name
 
     tags = {
         Name = "vote-app-ec2"
@@ -195,6 +197,7 @@ resource "aws_instance" "result_app_ec2" {
     vpc_security_group_ids      = [aws_security_group.result_app_sg.id]
     associate_public_ip_address = false
     key_name                    = var.key_name
+    iam_instance_profile = var.instance_profile_name
 
     tags = {
         Name = "result-app-ec2"
@@ -208,6 +211,7 @@ resource "aws_instance" "worker_app_ec2" {
     vpc_security_group_ids      = [aws_security_group.worker_app_sg.id]
     associate_public_ip_address = false
     key_name                    = var.key_name
+    iam_instance_profile = var.instance_profile_name
 
     tags = {
         Name = "worker-app-ec2"
@@ -221,7 +225,8 @@ resource "aws_instance" "redis_ec2" {
   vpc_security_group_ids      = [aws_security_group.redis_sg.id]
   associate_public_ip_address = false
   key_name                    = var.key_name
-
+  iam_instance_profile = var.instance_profile_name
+  
   tags = {
     Name = "redis-ec2"
   }
@@ -234,6 +239,7 @@ resource "aws_instance" "postgres_ec2" {
   vpc_security_group_ids      = [aws_security_group.postgres_sg.id]
   associate_public_ip_address = false
   key_name                    = var.key_name
+  iam_instance_profile = var.instance_profile_name
 
   tags = {
     Name = "postgres-ec2"
