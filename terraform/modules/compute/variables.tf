@@ -71,4 +71,7 @@ variable "postgres_port" {
 variable "ssh_port" {
   type = string
 }
+variable "instance_profile_name" {
+  type = string
+}
 
